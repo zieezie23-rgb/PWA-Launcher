@@ -26,6 +26,8 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 .danger{background:#2a0000;color:#ff5c5c;border:1px solid #ff2d2d}
 .row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
 .account{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px}
+.icon-only{background:none;border:none;padding:4px;color:#ff5252;display:flex;align-items:center;cursor:pointer;flex:none}
+.icon-only:hover{color:#ff8484}
 .email{font-family:'Creepster',cursive;font-size:17px;color:#ff5252;text-shadow:0 0 6px #7a0000;overflow:hidden;text-overflow:ellipsis}
 .muted{color:#8a7070;font-size:12px;line-height:1.6;font-family:system-ui,sans-serif}
 .status{min-height:18px;font-size:13px;margin-top:8px;font-family:system-ui,sans-serif;color:#ff8484}
@@ -83,8 +85,8 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 <div class="status" id="authStatus"></div>
 </section>
 
-<section class="panel hidden" id="accountPanel">
-<div class="account"><div class="email" id="userEmail"></div><button class="light" id="logout">🚪 Keluar</button></div>
+<section class="hidden" id="accountPanel" style="margin-bottom:16px">
+<div class="account"><div class="email" id="userEmail"></div><button class="icon-only" id="logout" title="Keluar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></button></div>
 </section>
 
 <hr class="divider hidden" id="addDivider">
