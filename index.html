@@ -2,47 +2,109 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ff8a00"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<meta name="theme-color" content="#0a0505"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
 <title>PWA Hub Cloud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Metal+Mania&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f7fb;color:#18202a}
-header{background:linear-gradient(135deg,#ff9800,#ff6d00);color:#fff;padding:22px 18px;border-radius:0 0 26px 26px}
-main{max-width:900px;margin:auto;padding:16px}h1{margin:0;font-size:27px}.sub{opacity:.9}
-.panel,.card{background:#fff;border-radius:19px;padding:15px;box-shadow:0 3px 14px #0001;margin-bottom:14px}
-label{display:block;font-weight:700;font-size:14px;margin:9px 0 5px}input{width:100%;padding:12px;border:1px solid #d9dfe8;border-radius:11px;font-size:16px}
-button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{background:#ff7a00;color:#fff}.dark{background:#20252b;color:#fff}.light{background:#edf1f6}.danger{background:#ffe8e8;color:#b42318}
-.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.account{display:flex;justify-content:space-between;align-items:center;gap:10px}.email{font-weight:800;overflow:hidden;text-overflow:ellipsis}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}.card{display:flex;gap:12px;margin:0}.icon{width:64px;height:64px;border-radius:16px;object-fit:cover;background:#edf1f5;flex:none}.info{min-width:0;flex:1}.name{font-weight:900;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.url{font-size:12px;color:#748092;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:4px 0 10px}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:8px 10px;font-size:13px}.muted{color:#6b7280;font-size:12px;line-height:1.5}.status{min-height:18px;font-size:13px;margin-top:8px}.empty{text-align:center;color:#6b7280;padding:30px}
-.hidden{display:none!important}@media(max-width:500px){.grid{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Metal Mania',system-ui,sans-serif;background:#0a0505 radial-gradient(ellipse at top, #1a0808 0%, #050202 70%);color:#d8c9c0;background-attachment:fixed}
+header{background:linear-gradient(160deg,#1c0505,#3b0a0a 60%,#0a0202);color:#ff2d2d;padding:30px 18px 26px;border-bottom:3px solid #4a0000;box-shadow:0 8px 30px #000c;text-align:center}
+header h1{margin:0;font-family:'Nosifer',cursive;font-size:30px;letter-spacing:1px;text-shadow:0 0 12px #ff0000,0 0 30px #7a0000;filter:drop-shadow(0 2px 0 #000)}
+header .sub{font-family:'Creepster',cursive;font-size:15px;color:#c98b8b;margin-top:8px;letter-spacing:.5px}
+main{max-width:900px;margin:auto;padding:16px}
+.panel{background:linear-gradient(160deg,#160a0a,#0d0606);border:1px solid #4a0e0e;border-radius:10px;padding:16px;box-shadow:inset 0 0 25px #000a, 0 4px 18px #000a;margin-bottom:16px}
+h2{margin:0 0 5px;font-family:'Nosifer',cursive;font-size:17px;color:#ff2d2d}
+label{display:block;font-family:'Creepster',cursive;font-size:15px;color:#ff5252;margin:10px 0 6px;letter-spacing:.5px}
+input{width:100%;padding:12px;background:#0a0303;border:1px solid #5a1414;border-radius:8px;font-size:15px;color:#e8d9d9}
+input::placeholder{color:#6b4a4a}
+input:focus{outline:none;border-color:#ff2d2d;box-shadow:0 0 10px #7a0000}
+button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:pointer;font-family:'Metal Mania',cursive;letter-spacing:.5px;font-size:14px}
+.primary{background:linear-gradient(160deg,#8b0000,#3b0000);color:#ffd9d9;box-shadow:0 0 12px #7a000080;border:1px solid #ff2d2d55}
+.light{background:#1c1414;color:#c9b8b8;border:1px solid #4a2a2a}
+.dark{background:#000;color:#9a9a9a;border:1px solid #333}
+.danger{background:#2a0000;color:#ff5c5c;border:1px solid #ff2d2d}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+.account{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:20px}
+.email{font-family:'Creepster',cursive;font-size:17px;color:#ff5252;text-shadow:0 0 6px #7a0000;overflow:hidden;text-overflow:ellipsis}
+.muted{color:#8a7070;font-size:12px;line-height:1.6;font-family:system-ui,sans-serif}
+.status{min-height:18px;font-size:13px;margin-top:8px;font-family:system-ui,sans-serif;color:#ff8484}
+.section-title{display:flex;align-items:center;gap:12px;margin:30px 0 12px}
+.section-title.spread{justify-content:space-between}
+.section-title .num{background:radial-gradient(circle at 30% 30%,#ff4d4d,#5c0000);color:#fff;font-weight:900;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;box-shadow:0 0 14px #ff000080;font-family:system-ui}
+.section-title .txt{font-family:'Nosifer',cursive;font-size:19px;color:#ff2d2d;text-shadow:0 0 10px #7a0000}
+.section-title .left{display:flex;align-items:center;gap:12px}
+.search-icon-btn{background:none;border:none;color:#ff5252;font-size:22px;padding:4px 6px;line-height:1;cursor:pointer}
+.search-icon-btn:hover{color:#ff8484}
+.divider{border:none;border-top:2px dashed #4a1414;margin:26px 0;opacity:.7}
+.empty{text-align:center;color:#8a7070;padding:30px;font-family:system-ui,sans-serif}
+.hidden{display:none!important}
+
+/* Tambah aplikasi */
+#addForm{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed #4a1414}
+#addForm.show{display:block}
+#addToggleBtn{width:100%}
+#cancelEditBtn{width:100%;margin-top:8px}
+
+/* Koleksi - grid & kartu (2 kolom tetap) */
+#searchWrap{display:none;margin-bottom:14px}
+#searchWrap.show{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{position:relative;background:linear-gradient(160deg,#160a0a,#0d0606);border:1px solid #4a0e0e;border-radius:10px;box-shadow:inset 0 0 25px #000a, 0 4px 18px #000a;min-height:112px}
+.card-row{position:absolute;top:50%;left:10px;right:10px;transform:translateY(-50%);display:flex;flex-direction:row;align-items:center;text-align:left;gap:8px}
+.icon{width:72px;height:72px;object-fit:contain;background:none;border:none;box-shadow:none;flex:none;cursor:pointer;transition:transform .15s}
+.icon:hover{transform:scale(1.06)}
+.name{font-family:'Creepster',cursive;font-size:14px;color:#ff6b6b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.install-btn{padding:7px 12px;font-size:11px;border-radius:8px;flex:none}
+.menu-wrap{position:absolute;right:8px;bottom:2px}
+.dots{background:none;border:none;color:#a06a6a;font-size:20px;line-height:1;padding:4px 6px;letter-spacing:1px}
+.dots:hover{color:#ff8484}
+.dropdown{position:absolute;right:0;bottom:26px;background:#140808;border:1px solid #5a1414;border-radius:8px;box-shadow:0 8px 24px #000d;display:none;flex-direction:column;overflow:hidden;min-width:140px;z-index:10}
+.dropdown.show{display:flex}
+.dropdown button{border-radius:0;text-align:left;padding:10px 14px;background:transparent;color:#e0cfcf;font-family:system-ui,sans-serif;font-weight:600;font-size:13px}
+.dropdown button:hover{background:#2a0000}
+.dropdown button.danger-item{color:#ff5c5c}
+::selection{background:#7a0000;color:#fff}
 </style>
 </head>
 <body>
-<header><main><h1>📱 PWA Hub Cloud</h1><div class="sub">Koleksi PWA kamu tersimpan online</div></main></header>
+<header><h1>👹 PWA HUB CLOUD 👹</h1><div class="sub">koleksi aplikasi yang terkubur dalam bayang-bayang...</div></header>
 <main>
+
+<div class="section-title"><span class="num">1</span><span class="txt">🩸 Bangkit / Rasuki Akun</span></div>
 <section class="panel" id="auth">
-<h2 style="margin:0 0 5px">Masuk / Daftar</h2><div class="muted">Gunakan username dan password. Akun yang sama dapat dipakai di HP lain.</div>
-<label>Username</label><input id="username" type="text" autocomplete="username" placeholder="contoh: budi123">
-<label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter">
-<div class="row" style="margin-top:13px"><button class="primary" id="login">Masuk</button><button class="light" id="signup">Daftar</button></div>
+<div class="muted">Masukkan mantra rahasiamu (username & password). Akun yang sama bisa dibangkitkan dari perangkat lain.</div>
+<label>👤 Username</label><input id="username" type="text" autocomplete="username" placeholder="contoh: budi123">
+<label>🔒 Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter kutukan">
+<div class="row" style="margin-top:14px"><button class="light" id="signup">💀 Daftar</button><button class="primary" id="login">⚡ Masuk</button></div>
 <div class="status" id="authStatus"></div>
 </section>
 
-<section class="panel hidden" id="userPanel"><div class="account"><div class="email" id="userEmail"></div><button class="light" id="logout">Keluar</button></div></section>
-
-<section class="panel hidden" id="addPanel">
-<h2 style="margin:0 0 4px">Tambah Aplikasi</h2><div class="muted">Icon akan dicoba dibaca dari manifest.json aplikasi tujuan.</div>
+<hr class="divider">
+<div class="section-title"><span class="num">2</span><span class="txt">🧟 Ritual Tambah Aplikasi</span></div>
+<section class="panel hidden" id="userPanel">
+<div class="account"><div class="email" id="userEmail"></div><button class="light" id="logout">🚪 Keluar</button></div>
+<button class="primary" id="addToggleBtn">☠️ Tambah Aplikasi</button>
+<div id="addForm">
 <label>Nama aplikasi</label><input id="name" placeholder="Contoh: Belajar Ceria">
 <label>URL aplikasi</label><input id="url" type="url" placeholder="https://contoh.com/app/">
 <label>URL repository</label><input id="repo" type="url" placeholder="https://github.com/user/repo">
-<button class="primary" id="add" style="width:100%;margin-top:13px">＋ Tambahkan</button><div class="status" id="addStatus"></div>
+<button class="primary" id="add" style="width:100%;margin-top:14px">☠️ Simpan</button>
+<button class="light hidden" id="cancelEditBtn">Batal Edit</button>
+<div class="status" id="addStatus"></div>
+</div>
 </section>
 
-<section class="hidden" id="listPanel">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px"><h2 style="margin:0">Koleksi Saya</h2><span id="count" class="muted"></span></div>
-<input id="search" placeholder="🔎 Cari aplikasi..." style="margin-bottom:12px">
+<hr class="divider">
+<div class="section-title spread hidden" id="listTitle"><div class="left"><span class="num">3</span><span class="txt">🕸️ Koleksi Terkutuk</span></div><button class="search-icon-btn" id="searchToggle">🔎</button></div>
+<div id="listPanel" class="hidden">
+<div id="searchWrap"><input id="search" placeholder="🔎 Cari di antara arwah aplikasi..."></div>
 <div id="grid" class="grid"></div>
-</section>
+</div>
+
+<div class="muted" style="text-align:center;margin-top:22px">🕯️ Icon otomatis dibaca dari manifest.json aplikasi tujuan. Klik ikon untuk buka aplikasi, klik ⋯ untuk menu (Edit / Repo / Musnahkan).</div>
 </main>
+<footer style="text-align:center;padding:20px 16px 30px;font-family:'Creepster',cursive;font-size:13px;color:#6b4a4a;letter-spacing:.5px">Zie Project - PWA Launcher V. 1.0 - @2026</footer>
 
 <script type="module">
 /* 1) Buat project Supabase.
@@ -60,38 +122,99 @@ const $=id=>document.getElementById(id);
 const DUMMY_DOMAIN="pwahub.local"; // username diubah jadi "username@pwahub.local" supaya Supabase Auth tetap jalan tanpa email asli
 function toEmail(u){return u.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,"")+"@"+DUMMY_DOMAIN}
 function msg(el,text){el.textContent=text}
-function fallback(name){let l=(name||"P").trim().charAt(0).toUpperCase();return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="42" fill="#ff8a00"/><text x="96" y="122" text-anchor="middle" font-family="Arial" font-size="92" font-weight="700" fill="white">${l}</text></svg>`)}
+function fallback(name){return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><text x="96" y="140" text-anchor="middle" font-size="120">👻</text></svg>`)}
 function valid(u){try{return new URL(u).href}catch{return ""}}
 async function manifestIcon(appUrl,name){
- try{let u=new URL(appUrl), candidates=[];
-   // First try same-origin /manifest.json, then inspect HTML for <link rel=manifest>.
+ try{let u=new URL(appUrl);
+   // Coba /manifest.json dulu, lalu cari <link rel=manifest> di HTML halamannya.
    let r=await fetch(new URL("/manifest.json",u.origin),{mode:"cors",cache:"no-store"});
    if(!r.ok){let h=await fetch(appUrl,{mode:"cors",cache:"no-store"});let t=await h.text();let m=t.match(/<link[^>]+rel=["'](?:manifest|webmanifest)["'][^>]+href=["']([^"']+)["']/i);if(!m)throw 0;r=await fetch(new URL(m[1],appUrl),{mode:"cors",cache:"no-store"})}
    let j=await r.json();let icons=j.icons||[];if(!icons.length)throw 0;
-   let b=icons.find(x=>String(x.sizes||"").includes("192x192"))||icons.find(x=>String(x.sizes||"").includes("512x512"))||icons[0];
+   let b=icons.find(x=>String(x.sizes||"").includes("512x512"))||icons.find(x=>String(x.sizes||"").includes("192x192"))||icons[0];
    return new URL(b.src,r.url||appUrl).href;
  }catch{return fallback(name)}
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 
+let editingId=null;
+
+function resetAddForm(){
+ editingId=null;
+ $("name").value=$("url").value=$("repo").value="";
+ $("add").textContent="☠️ Simpan";
+ $("cancelEditBtn").classList.add("hidden");
+ msg($("addStatus"),"");
+}
+
 async function refresh(){
  if(!supabase)return;
  const {data:{user}}=await supabase.auth.getUser();
  const logged=!!user;
- $("auth").classList.toggle("hidden",logged);$("userPanel").classList.toggle("hidden",!logged);$("addPanel").classList.toggle("hidden",!logged);$("listPanel").classList.toggle("hidden",!logged);
+ $("auth").classList.toggle("hidden",logged);
+ $("userPanel").classList.toggle("hidden",!logged);
+ $("listTitle").classList.toggle("hidden",!logged);
+ $("listPanel").classList.toggle("hidden",!logged);
  if(!logged)return;
- $("userEmail").textContent=user.user_metadata?.username||user.email.split("@")[0];
+ $("userEmail").textContent="👁️ Selamat datang, "+(user.user_metadata?.username||user.email.split("@")[0]);
  const {data,error}=await supabase.from("apps").select("*").order("created_at",{ascending:false});
  if(error){$("grid").innerHTML=`<div class="panel empty">Gagal mengambil data: ${escapeHtml(error.message)}</div>`;return}
  const q=$("search").value.toLowerCase().trim();const list=(data||[]).filter(a=>(a.name+" "+a.url).toLowerCase().includes(q));
- $("count").textContent=(data||[]).length+" aplikasi";
- $("grid").innerHTML=list.length?list.map(a=>`<article class="card"><img class="icon" src="${escapeHtml(a.icon_url||fallback(a.name))}" onerror="this.src='${fallback(a.name)}'"><div class="info"><div class="name">${escapeHtml(a.name)}</div><div class="url">${escapeHtml(a.url)}</div><div class="actions"><button class="light" data-open="${a.id}">Buka</button>${a.installed?`<button class="light" data-uninstall="${a.id}">✅ Terinstal</button>`:`<button class="primary" data-install="${a.id}">Instal</button>`}<button class="dark" data-repo="${a.id}">Repo</button><button class="danger" data-delete="${a.id}">Hapus</button></div></div></article>`).join(""):`<div class="panel empty">Belum ada aplikasi.</div>`;
+ $("grid").innerHTML=list.length?list.map(a=>`<article class="card">
+  <div class="card-row">
+   <img class="icon" src="${escapeHtml(a.icon_url||fallback(a.name))}" onerror="this.onerror=null;this.src='${fallback(a.name)}'" data-open="${a.id}">
+   <div class="name">${escapeHtml(a.name)}</div>
+   ${a.installed?`<button class="light install-btn" data-uninstall="${a.id}">✅ Terinstal</button>`:`<button class="primary install-btn" data-install="${a.id}">Instal</button>`}
+  </div>
+  <div class="menu-wrap">
+   <button class="dots" data-menu="${a.id}">•••</button>
+   <div class="dropdown">
+    <button data-edit="${a.id}">✏️ Edit</button>
+    <button data-repo="${a.id}">🔗 Repo</button>
+    <button class="danger-item" data-delete="${a.id}">☠️ Musnahkan</button>
+   </div>
+  </div>
+ </article>`).join(""):`<div class="panel empty">Belum ada aplikasi.</div>`;
+
  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{let a=data.find(x=>x.id==b.dataset.open);window.open(a.url,"_blank","noopener")});
- document.querySelectorAll("[data-repo]").forEach(b=>b.onclick=()=>{let a=data.find(x=>x.id==b.dataset.repo);window.open(a.repo_url,"_blank","noopener")});
  document.querySelectorAll("[data-install]").forEach(b=>b.onclick=async()=>{let a=data.find(x=>x.id==b.dataset.install);window.open(a.url,"_blank","noopener");alert("Aplikasi dibuka. Jika memenuhi syarat PWA, gunakan menu instalasi browser. Setelah itu tombol akan ditandai Terinstal.");await supabase.from("apps").update({installed:true}).eq("id",a.id);refresh()});
- document.querySelectorAll("[data-uninstall]").forEach(b=>b.onclick=async()=>{let a=data.find(x=>x.id==b.dataset.uninstall);if(confirm("Batal instal / hapus centang \"Terinstal\" untuk "+a.name+"?")){await supabase.from("apps").update({installed:false}).eq("id",a.id);refresh()}});
- document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=async()=>{if(confirm("Hapus aplikasi ini?")){await supabase.from("apps").delete().eq("id",b.dataset.delete);refresh()}});
+ document.querySelectorAll("[data-uninstall]").forEach(b=>b.onclick=async()=>{let a=data.find(x=>x.id==b.dataset.uninstall);if(confirm('Batal instal / hapus centang "Terinstal" untuk '+a.name+"?")){await supabase.from("apps").update({installed:false}).eq("id",a.id);refresh()}});
+ document.querySelectorAll("[data-repo]").forEach(b=>b.onclick=(e)=>{e.stopPropagation();let a=data.find(x=>x.id==b.dataset.repo);window.open(a.repo_url,"_blank","noopener")});
+ document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=async(e)=>{e.stopPropagation();if(confirm("Musnahkan aplikasi ini selamanya?")){await supabase.from("apps").delete().eq("id",b.dataset.delete);refresh()}});
+ document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=(e)=>{
+  e.stopPropagation();
+  let a=data.find(x=>x.id==b.dataset.edit);
+  editingId=a.id;
+  $("name").value=a.name; $("url").value=a.url; $("repo").value=a.repo_url;
+  $("add").textContent="☠️ Simpan Perubahan";
+  $("cancelEditBtn").classList.remove("hidden");
+  $("addForm").classList.add("show");
+  msg($("addStatus"),"Mengedit: "+a.name);
+  $("addForm").scrollIntoView({behavior:"smooth",block:"center"});
+ });
+ document.querySelectorAll("[data-menu]").forEach(b=>b.onclick=(e)=>{
+  e.stopPropagation();
+  const dd=b.nextElementSibling;
+  document.querySelectorAll(".dropdown.show").forEach(d=>{if(d!==dd)d.classList.remove("show")});
+  dd.classList.toggle("show");
+ });
 }
+
+document.addEventListener("click",function(e){
+ if(!e.target.closest(".menu-wrap")){
+  document.querySelectorAll(".dropdown.show").forEach(d=>d.classList.remove("show"));
+ }
+});
+
+$("addToggleBtn").onclick=()=>{
+ if(editingId)resetAddForm();
+ $("addForm").classList.toggle("show");
+};
+$("cancelEditBtn").onclick=()=>{resetAddForm();$("addForm").classList.remove("show")};
+$("searchToggle").onclick=()=>{
+ $("searchWrap").classList.toggle("show");
+ if($("searchWrap").classList.contains("show"))$("search").focus();
+};
+
 $("signup").onclick=async()=>{
  if(!supabase)return msg($("authStatus"),"Isi konfigurasi Supabase terlebih dahulu.");
  let uname=$("username").value.trim();
@@ -107,13 +230,20 @@ $("login").onclick=async()=>{
 };
 $("logout").onclick=async()=>{await supabase.auth.signOut();refresh()};
 $("add").onclick=async()=>{
- if(!supabase)return;let name=$("name").value.trim(),url=valid($("url").value.trim()),repo=valid($("repo").value.trim());
+ if(!supabase)return;
+ let name=$("name").value.trim(),url=valid($("url").value.trim()),repo=valid($("repo").value.trim());
  if(!name||!url||!repo)return msg($("addStatus"),"Lengkapi semua kolom.");
  msg($("addStatus"),"Membaca icon...");
- let icon=await manifestIcon(url,name);let {data:{user}}=await supabase.auth.getUser();
- let {error}=await supabase.from("apps").insert({user_id:user.id,name,url,repo_url:repo,icon_url:icon});
- msg($("addStatus"),error?error.message:"Aplikasi berhasil ditambahkan.");
- if(!error){$("name").value=$("url").value=$("repo").value="";refresh()}
+ let icon=await manifestIcon(url,name);
+ let {data:{user}}=await supabase.auth.getUser();
+ let error;
+ if(editingId){
+  ({error}=await supabase.from("apps").update({name,url,repo_url:repo,icon_url:icon}).eq("id",editingId));
+ }else{
+  ({error}=await supabase.from("apps").insert({user_id:user.id,name,url,repo_url:repo,icon_url:icon}));
+ }
+ msg($("addStatus"),error?error.message:(editingId?"Perubahan disimpan.":"Aplikasi berhasil ditambahkan."));
+ if(!error){resetAddForm();$("addForm").classList.remove("show");refresh()}
 };
 $("search").oninput=refresh;
 if(configured){supabase.auth.onAuthStateChange(()=>refresh());refresh()}else{
