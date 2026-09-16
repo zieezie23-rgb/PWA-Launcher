@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff8a00"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg">
+<title>PWA Hub Cloud</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f7fb;color:#18202a}
+header{background:linear-gradient(135deg,#ff9800,#ff6d00);color:#fff;padding:22px 18px;border-radius:0 0 26px 26px}
+main{max-width:900px;margin:auto;padding:16px}h1{margin:0;font-size:27px}.sub{opacity:.9}
+.panel,.card{background:#fff;border-radius:19px;padding:15px;box-shadow:0 3px 14px #0001;margin-bottom:14px}
+label{display:block;font-weight:700;font-size:14px;margin:9px 0 5px}input{width:100%;padding:12px;border:1px solid #d9dfe8;border-radius:11px;font-size:16px}
+button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{background:#ff7a00;color:#fff}.dark{background:#20252b;color:#fff}.light{background:#edf1f6}.danger{background:#ffe8e8;color:#b42318}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}.account{display:flex;justify-content:space-between;align-items:center;gap:10px}.email{font-weight:800;overflow:hidden;text-overflow:ellipsis}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}.card{display:flex;gap:12px;margin:0}.icon{width:64px;height:64px;border-radius:16px;object-fit:cover;background:#edf1f5;flex:none}.info{min-width:0;flex:1}.name{font-weight:900;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.url{font-size:12px;color:#748092;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:4px 0 10px}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:8px 10px;font-size:13px}.muted{color:#6b7280;font-size:12px;line-height:1.5}.status{min-height:18px;font-size:13px;margin-top:8px}.empty{text-align:center;color:#6b7280;padding:30px}
+.hidden{display:none!important}@media(max-width:500px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><main><h1>📱 PWA Hub Cloud</h1><div class="sub">Koleksi PWA kamu tersimpan online</div></main></header>
+<main>
+<section class="panel" id="auth">
+<h2 style="margin:0 0 5px">Masuk / Daftar</h2><div class="muted">Gunakan username dan password. Akun yang sama dapat dipakai di HP lain.</div>
+<label>Username</label><input id="username" type="text" autocomplete="username" placeholder="contoh: budi123">
+<label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter">
+<div class="row" style="margin-top:13px"><button class="primary" id="login">Masuk</button><button class="light" id="signup">Daftar</button></div>
+<div class="status" id="authStatus"></div>
+</section>
+
+<section class="panel hidden" id="userPanel"><div class="account"><div class="email" id="userEmail"></div><button class="light" id="logout">Keluar</button></div></section>
+
+<section class="panel hidden" id="addPanel">
+<h2 style="margin:0 0 4px">Tambah Aplikasi</h2><div class="muted">Icon akan dicoba dibaca dari manifest.json aplikasi tujuan.</div>
+<label>Nama aplikasi</label><input id="name" placeholder="Contoh: Belajar Ceria">
+<label>URL aplikasi</label><input id="url" type="url" placeholder="https://contoh.com/app/">
+<label>URL repository</label><input id="repo" type="url" placeholder="https://github.com/user/repo">
+<button class="primary" id="add" style="width:100%;margin-top:13px">＋ Tambahkan</button><div class="status" id="addStatus"></div>
+</section>
+
+<section class="hidden" id="listPanel">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px"><h2 style="margin:0">Koleksi Saya</h2><span id="count" class="muted"></span></div>
+<input id="search" placeholder="🔎 Cari aplikasi..." style="margin-bottom:12px">
+<div id="grid" class="grid"></div>
+</section>
+</main>
+
+<script type="module">
+/* 1) Buat project Supabase.
+   2) Isi SUPABASE_URL dan SUPABASE_ANON_KEY di bawah.
+   3) Jalankan SQL yang ada di supabase.sql.
+*/
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://tkovoanimdzjsfcpvguf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_yO7XRTLUT_5eejm3Smr0mA_Oxx-DQyl";
+const configured = !SUPABASE_URL.startsWith("GANTI_") && !SUPABASE_ANON_KEY.startsWith("GANTI_");
+const supabase = configured ? createClient(SUPABASE_URL,SUPABASE_ANON_KEY) : null;
+
+const $=id=>document.getElementById(id);
+const DUMMY_DOMAIN="pwahub.local"; // username diubah jadi "username@pwahub.local" supaya Supabase Auth tetap jalan tanpa email asli
+function toEmail(u){return u.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,"")+"@"+DUMMY_DOMAIN}
+function msg(el,text){el.textContent=text}
+function fallback(name){let l=(name||"P").trim().charAt(0).toUpperCase();return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><rect width="192" height="192" rx="42" fill="#ff8a00"/><text x="96" y="122" text-anchor="middle" font-family="Arial" font-size="92" font-weight="700" fill="white">${l}</text></svg>`)}
+function valid(u){try{return new URL(u).href}catch{return ""}}
+async function manifestIcon(appUrl,name){
+ try{let u=new URL(appUrl), candidates=[];
+   // First try same-origin /manifest.json, then inspect HTML for <link rel=manifest>.
+   let r=await fetch(new URL("/manifest.json",u.origin),{mode:"cors",cache:"no-store"});
+   if(!r.ok){let h=await fetch(appUrl,{mode:"cors",cache:"no-store"});let t=await h.text();let m=t.match(/<link[^>]+rel=["'](?:manifest|webmanifest)["'][^>]+href=["']([^"']+)["']/i);if(!m)throw 0;r=await fetch(new URL(m[1],appUrl),{mode:"cors",cache:"no-store"})}
+   let j=await r.json();let icons=j.icons||[];if(!icons.length)throw 0;
+   let b=icons.find(x=>String(x.sizes||"").includes("192x192"))||icons.find(x=>String(x.sizes||"").includes("512x512"))||icons[0];
+   return new URL(b.src,r.url||appUrl).href;
+ }catch{return fallback(name)}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+async function refresh(){
+ if(!supabase)return;
+ const {data:{user}}=await supabase.auth.getUser();
+ const logged=!!user;
+ $("auth").classList.toggle("hidden",logged);$("userPanel").classList.toggle("hidden",!logged);$("addPanel").classList.toggle("hidden",!logged);$("listPanel").classList.toggle("hidden",!logged);
+ if(!logged)return;
+ $("userEmail").textContent=user.user_metadata?.username||user.email.split("@")[0];
+ const {data,error}=await supabase.from("apps").select("*").order("created_at",{ascending:false});
+ if(error){$("grid").innerHTML=`<div class="panel empty">Gagal mengambil data: ${escapeHtml(error.message)}</div>`;return}
+ const q=$("search").value.toLowerCase().trim();const list=(data||[]).filter(a=>(a.name+" "+a.url).toLowerCase().includes(q));
+ $("count").textContent=(data||[]).length+" aplikasi";
+ $("grid").innerHTML=list.length?list.map(a=>`<article class="card"><img class="icon" src="${escapeHtml(a.icon_url||fallback(a.name))}" onerror="this.src='${fallback(a.name)}'"><div class="info"><div class="name">${escapeHtml(a.name)}</div><div class="url">${escapeHtml(a.url)}</div><div class="actions"><button class="light" data-open="${a.id}">Buka</button>${a.installed?`<button class="light" data-uninstall="${a.id}">✅ Terinstal</button>`:`<button class="primary" data-install="${a.id}">Instal</button>`}<button class="dark" data-repo="${a.id}">Repo</button><button class="danger" data-delete="${a.id}">Hapus</button></div></div></article>`).join(""):`<div class="panel empty">Belum ada aplikasi.</div>`;
+ document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{let a=data.find(x=>x.id==b.dataset.open);window.open(a.url,"_blank","noopener")});
+ document.querySelectorAll("[data-repo]").forEach(b=>b.onclick=()=>{let a=data.find(x=>x.id==b.dataset.repo);window.open(a.repo_url,"_blank","noopener")});
+ document.querySelectorAll("[data-install]").forEach(b=>b.onclick=async()=>{let a=data.find(x=>x.id==b.dataset.install);window.open(a.url,"_blank","noopener");alert("Aplikasi dibuka. Jika memenuhi syarat PWA, gunakan menu instalasi browser. Setelah itu tombol akan ditandai Terinstal.");await supabase.from("apps").update({installed:true}).eq("id",a.id);refresh()});
+ document.querySelectorAll("[data-uninstall]").forEach(b=>b.onclick=async()=>{let a=data.find(x=>x.id==b.dataset.uninstall);if(confirm("Batal instal / hapus centang \"Terinstal\" untuk "+a.name+"?")){await supabase.from("apps").update({installed:false}).eq("id",a.id);refresh()}});
+ document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=async()=>{if(confirm("Hapus aplikasi ini?")){await supabase.from("apps").delete().eq("id",b.dataset.delete);refresh()}});
+}
+$("signup").onclick=async()=>{
+ if(!supabase)return msg($("authStatus"),"Isi konfigurasi Supabase terlebih dahulu.");
+ let uname=$("username").value.trim();
+ if(uname.length<3)return msg($("authStatus"),"Username minimal 3 karakter.");
+ let {error}=await supabase.auth.signUp({email:toEmail(uname),password:$("password").value,options:{data:{username:uname}}});
+ msg($("authStatus"),error?(error.message.includes("registered")?"Username sudah dipakai.":error.message):"Pendaftaran berhasil. Silakan masuk.")
+};
+$("login").onclick=async()=>{
+ if(!supabase)return msg($("authStatus"),"Isi konfigurasi Supabase terlebih dahulu.");
+ let uname=$("username").value.trim();
+ let {error}=await supabase.auth.signInWithPassword({email:toEmail(uname),password:$("password").value});
+ msg($("authStatus"),error?"Username atau password salah.":"Berhasil masuk.");if(!error)refresh()
+};
+$("logout").onclick=async()=>{await supabase.auth.signOut();refresh()};
+$("add").onclick=async()=>{
+ if(!supabase)return;let name=$("name").value.trim(),url=valid($("url").value.trim()),repo=valid($("repo").value.trim());
+ if(!name||!url||!repo)return msg($("addStatus"),"Lengkapi semua kolom.");
+ msg($("addStatus"),"Membaca icon...");
+ let icon=await manifestIcon(url,name);let {data:{user}}=await supabase.auth.getUser();
+ let {error}=await supabase.from("apps").insert({user_id:user.id,name,url,repo_url:repo,icon_url:icon});
+ msg($("addStatus"),error?error.message:"Aplikasi berhasil ditambahkan.");
+ if(!error){$("name").value=$("url").value=$("repo").value="";refresh()}
+};
+$("search").oninput=refresh;
+if(configured){supabase.auth.onAuthStateChange(()=>refresh());refresh()}else{
+ $("authStatus").textContent="Supabase belum dikonfigurasi. Isi SUPABASE_URL dan SUPABASE_ANON_KEY di index.html.";
+}
+</script>
+</body></html>
