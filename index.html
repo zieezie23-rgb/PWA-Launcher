@@ -31,7 +31,6 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 .status{min-height:18px;font-size:13px;margin-top:8px;font-family:system-ui,sans-serif;color:#ff8484}
 .section-title{display:flex;align-items:center;gap:12px;margin:30px 0 12px}
 .section-title.spread{justify-content:space-between}
-.section-title .num{background:radial-gradient(circle at 30% 30%,#ff4d4d,#5c0000);color:#fff;font-weight:900;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;box-shadow:0 0 14px #ff000080;font-family:system-ui}
 .section-title .txt{font-family:'Nosifer',cursive;font-size:19px;color:#ff2d2d;text-shadow:0 0 10px #7a0000}
 .section-title .left{display:flex;align-items:center;gap:12px}
 .search-icon-btn{background:none;border:none;color:#ff5252;font-size:22px;padding:4px 6px;line-height:1;cursor:pointer}
@@ -71,7 +70,7 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 <header><h1>👹 PWA HUB CLOUD 👹</h1><div class="sub">koleksi aplikasi yang terkubur dalam bayang-bayang...</div></header>
 <main>
 
-<div class="section-title"><span class="num">1</span><span class="txt">🩸 Bangkit / Rasuki Akun</span></div>
+<div class="section-title" id="authTitle"><span class="txt">🩸 Bangkit / Rasuki Akun</span></div>
 <section class="panel" id="auth">
 <div class="muted">Masukkan mantra rahasiamu (username & password). Akun yang sama bisa dibangkitkan dari perangkat lain.</div>
 <label>👤 Username</label><input id="username" type="text" autocomplete="username" placeholder="contoh: budi123">
@@ -80,8 +79,8 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 <div class="status" id="authStatus"></div>
 </section>
 
-<hr class="divider">
-<div class="section-title"><span class="num">2</span><span class="txt">🧟 Ritual Tambah Aplikasi</span></div>
+<hr class="divider hidden" id="addDivider">
+<div class="section-title hidden" id="addTitle"><span class="txt">🧟 Ritual Tambah Aplikasi</span></div>
 <section class="panel hidden" id="userPanel">
 <div class="account"><div class="email" id="userEmail"></div><button class="light" id="logout">🚪 Keluar</button></div>
 <button class="primary" id="addToggleBtn">☠️ Tambah Aplikasi</button>
@@ -95,14 +94,12 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 </div>
 </section>
 
-<hr class="divider">
-<div class="section-title spread hidden" id="listTitle"><div class="left"><span class="num">3</span><span class="txt">🕸️ Koleksi Terkutuk</span></div><button class="search-icon-btn" id="searchToggle">🔎</button></div>
+<hr class="divider hidden" id="listDivider">
+<div class="section-title spread hidden" id="listTitle"><div class="left"><span class="txt">🕸️ Koleksi Terkutuk</span></div><button class="search-icon-btn" id="searchToggle">🔎</button></div>
 <div id="listPanel" class="hidden">
 <div id="searchWrap"><input id="search" placeholder="🔎 Cari di antara arwah aplikasi..."></div>
 <div id="grid" class="grid"></div>
 </div>
-
-<div class="muted" style="text-align:center;margin-top:22px">🕯️ Icon otomatis dibaca dari manifest.json aplikasi tujuan. Klik ikon untuk buka aplikasi, klik ⋯ untuk menu (Edit / Repo / Musnahkan).</div>
 </main>
 <footer style="text-align:center;padding:20px 16px 30px;font-family:'Creepster',cursive;font-size:13px;color:#6b4a4a;letter-spacing:.5px">Zie Project - PWA Launcher V. 1.0 - @2026</footer>
 
@@ -151,7 +148,11 @@ async function refresh(){
  const {data:{user}}=await supabase.auth.getUser();
  const logged=!!user;
  $("auth").classList.toggle("hidden",logged);
+ $("authTitle").classList.toggle("hidden",logged);
+ $("addDivider").classList.toggle("hidden",!logged);
+ $("addTitle").classList.toggle("hidden",!logged);
  $("userPanel").classList.toggle("hidden",!logged);
+ $("listDivider").classList.toggle("hidden",!logged);
  $("listTitle").classList.toggle("hidden",!logged);
  $("listPanel").classList.toggle("hidden",!logged);
  if(!logged)return;
