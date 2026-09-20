@@ -68,7 +68,8 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 .icon:hover{transform:scale(1.06)}
 .name{font-family:'Creepster',cursive;font-size:19px;line-height:1.15;color:#ff6b6b;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
 .card.drag-over{border-color:#ff2d2d;box-shadow:0 0 0 2px #ff2d2d55,inset 0 0 25px #000a}
-.card{cursor:grab;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.card{cursor:grab;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.icon{-webkit-user-drag:none;-webkit-touch-callout:none}
 .card:active{cursor:grabbing}
 .card.dragging{opacity:.5;transform:scale(1.03);z-index:5}
 .menu-wrap{position:absolute;right:4px;top:2px}
@@ -193,12 +194,12 @@ async function refresh(){
     <button class="danger-item" data-delete="${a.id}">☠️ Musnahkan</button>
    </div>
   </div>
-  <img class="icon" src="${escapeHtml(a.icon_url||fallback(a.name))}" onerror="this.onerror=null;this.src='${fallback(a.name)}'" data-open="${a.id}">
+  <img class="icon" draggable="false" src="${escapeHtml(a.icon_url||fallback(a.name))}" onerror="this.onerror=null;this.src='${fallback(a.name)}'" data-open="${a.id}">
   <div class="name">${escapeHtml(a.name)}</div>
  </article>`).join(""):`<div class="panel empty">Belum ada aplikasi.</div>`;
 
  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{let a=data.find(x=>x.id==b.dataset.open);window.open(a.url,"_blank","noopener")});
- setupDragReorder(list);
+ setupDragReorder(data||[]);
  document.querySelectorAll("[data-repo]").forEach(b=>b.onclick=(e)=>{e.stopPropagation();let a=data.find(x=>x.id==b.dataset.repo);window.open(a.repo_url,"_blank","noopener")});
  document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=async(e)=>{e.stopPropagation();if(confirm("Musnahkan aplikasi ini selamanya?")){await supabase.from("apps").delete().eq("id",b.dataset.delete);refresh()}});
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=(e)=>{
@@ -281,6 +282,9 @@ document.addEventListener("pointercancel",()=>{
  document.querySelectorAll(".card.drag-over").forEach(c=>c.classList.remove("drag-over"));
  dragSrcId=null;dragActive=false;dragOverId=null;
 });
+
+document.addEventListener("touchmove",(e)=>{if(dragActive&&e.cancelable)e.preventDefault()},{passive:false});
+document.addEventListener("contextmenu",(e)=>{if(dragSrcId&&e.target.closest(".card"))e.preventDefault()});
 
 document.addEventListener("click",function(e){
  if(!e.target.closest(".menu-wrap")){
