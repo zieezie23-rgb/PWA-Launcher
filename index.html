@@ -59,21 +59,21 @@ button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:point
 #searchWrap.show{display:block}
 #listPanel{flex:1;min-height:0;display:flex;flex-direction:column}
 #searchWrap{flex:none}
-.grid{--cols:2;flex:1;min-height:0;display:grid;gap:10px;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,minmax(64px,1fr));grid-auto-columns:calc((100% - (var(--cols) - 1)*10px)/var(--cols));overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#5a1414 transparent;padding-bottom:6px}
+.grid{--cols:2;flex:1;min-height:0;display:grid;gap:10px;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,minmax(120px,1fr));grid-auto-columns:calc((100% - (var(--cols) - 1)*10px)/var(--cols));overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#5a1414 transparent;padding-bottom:6px}
 @media (min-width:600px){.grid{--cols:4}}
 .grid>.card{scroll-snap-align:start;min-height:0}
 .grid>.empty{grid-column:1 / span 2;grid-row:1}
 .card{position:relative;background:linear-gradient(160deg,#160a0a,#0d0606);border:1px solid #4a0e0e;border-radius:10px;box-shadow:inset 0 0 25px #000a, 0 4px 18px #000a;padding:6px 10px 14px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;text-align:left}
-.icon{width:40px;height:40px;object-fit:contain;background:none;border:none;box-shadow:none;flex:none;cursor:pointer;transition:transform .15s}
+.icon{width:100px;height:100px;object-fit:contain;background:none;border:none;box-shadow:none;flex:none;cursor:pointer;transition:transform .15s}
 .icon:hover{transform:scale(1.06)}
-.name{font-family:'Creepster',cursive;font-size:16px;line-height:1.15;color:#ff6b6b;flex:1;min-width:0;text-align:left;padding-right:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.name{font-family:'Creepster',cursive;font-size:24px;line-height:1.15;color:#ff6b6b;flex:1;min-width:0;text-align:left;padding-right:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
 .card.drag-over{border-color:#ff2d2d;box-shadow:0 0 0 2px #ff2d2d55,inset 0 0 25px #000a}
 .card{cursor:grab;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .icon{-webkit-user-drag:none;-webkit-touch-callout:none}
 .card:active{cursor:grabbing}
 .card.dragging{opacity:.5;transform:scale(1.03);z-index:5}
 .menu-wrap{position:absolute;right:0;bottom:0}
-.dots{background:none;border:none;color:#a06a6a;font-size:16px;line-height:1;padding:4px 10px;letter-spacing:1px}
+.dots{background:none;border:none;color:#a06a6a;font-size:20px;line-height:1;padding:4px 10px;letter-spacing:1px}
 .dots:hover{color:#ff8484}
 .dropdown{position:fixed;top:0;left:0;background:#140808;border:1px solid #5a1414;border-radius:8px;box-shadow:0 8px 24px #000d;display:none;flex-direction:column;overflow:hidden;min-width:140px;z-index:10}
 .dropdown.show{display:flex}
