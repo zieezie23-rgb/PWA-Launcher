@@ -1,8 +1,9 @@
 name: Build APK
 
 on:
-  push:
-    branches: [ main ]
+  # Aktifkan lagi trigger push setelah proyek Android (folder app/) ditambahkan.
+  # push:
+  #   branches: [ main ]
   workflow_dispatch:
 
 jobs:
