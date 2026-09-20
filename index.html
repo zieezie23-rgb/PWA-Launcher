@@ -1,24 +1,337 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f172a"><meta name="description" content="PWA Check Item Tidak Bergerak"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="assets/icon.png"><link rel="apple-touch-icon" href="assets/icon.png"><link rel="stylesheet" href="style.css"><title>Check Item Tidak Bergerak</title></head>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0505"><link rel="manifest" href="manifest.json"><link rel="icon" href="assets/icon-192.png"><link rel="apple-touch-icon" href="assets/icon-192.png">
+<title>PWA Launcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Metal+Mania&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html{overscroll-behavior-y:contain;height:100%;overflow:hidden}
+body{margin:0;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;font-family:'Metal Mania',system-ui,sans-serif;background:#0a0505 radial-gradient(ellipse at top, #1a0808 0%, #050202 70%);color:#d8c9c0;background-attachment:fixed;overscroll-behavior-y:contain}
+header{background:linear-gradient(160deg,#1c0505,#3b0a0a 60%,#0a0202);color:#ff2d2d;padding:30px 18px 26px;border-bottom:3px solid #4a0000;box-shadow:0 8px 30px #000c;text-align:center}
+header h1{margin:0;font-family:'Nosifer',cursive;font-size:30px;letter-spacing:1px;text-shadow:0 0 12px #ff0000,0 0 30px #7a0000;filter:drop-shadow(0 2px 0 #000)}
+header .sub{font-family:'Creepster',cursive;font-size:15px;color:#c98b8b;margin-top:8px;letter-spacing:.5px}
+header{flex:none}
+main{flex:1;min-height:0;width:100%;max-width:900px;margin:0 auto;padding:12px 16px 8px;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto}
+main>*{flex:none}
+footer{flex:none;text-align:center;padding:10px 16px calc(12px + env(safe-area-inset-bottom));font-family:'Creepster',cursive;font-size:13px;color:#6b4a4a;letter-spacing:.5px}
+.panel{background:linear-gradient(160deg,#160a0a,#0d0606);border:1px solid #4a0e0e;border-radius:10px;padding:16px;box-shadow:inset 0 0 25px #000a, 0 4px 18px #000a;margin-bottom:16px}
+h2{margin:0 0 5px;font-family:'Nosifer',cursive;font-size:17px;color:#ff2d2d}
+label{display:block;font-family:'Creepster',cursive;font-size:15px;color:#ff5252;margin:10px 0 6px;letter-spacing:.5px}
+input{width:100%;padding:12px;background:#0a0303;border:1px solid #5a1414;border-radius:8px;font-size:15px;color:#e8d9d9}
+input::placeholder{color:#6b4a4a}
+input:focus{outline:none;border-color:#ff2d2d;box-shadow:0 0 10px #7a0000}
+button{border:0;border-radius:8px;padding:11px 14px;font-weight:800;cursor:pointer;font-family:'Metal Mania',cursive;letter-spacing:.5px;font-size:14px}
+.primary{background:linear-gradient(160deg,#8b0000,#3b0000);color:#ffd9d9;box-shadow:0 0 12px #7a000080;border:1px solid #ff2d2d55}
+.light{background:#1c1414;color:#c9b8b8;border:1px solid #4a2a2a}
+.dark{background:#000;color:#9a9a9a;border:1px solid #333}
+.danger{background:#2a0000;color:#ff5c5c;border:1px solid #ff2d2d}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+.account{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.icon-only{background:none;border:none;padding:4px;color:#ff5252;display:flex;align-items:center;cursor:pointer;flex:none}
+.icon-only:hover{color:#ff8484}
+.email{font-family:'Creepster',cursive;font-size:17px;color:#ff5252;text-shadow:0 0 6px #7a0000;overflow:hidden;text-overflow:ellipsis}
+.muted{color:#8a7070;font-size:12px;line-height:1.6;font-family:system-ui,sans-serif}
+.status{min-height:18px;font-size:13px;margin-top:8px;font-family:system-ui,sans-serif;color:#ff8484}
+.section-title{display:flex;align-items:center;gap:12px;margin:12px 0 10px}
+.section-title.spread{justify-content:space-between}
+.section-title .txt{font-family:'Nosifer',cursive;font-size:19px;color:#ff2d2d;text-shadow:0 0 10px #7a0000}
+.section-title .left{display:flex;align-items:center;gap:12px}
+.search-icon-btn{background:none;border:none;color:#ff5252;font-size:22px;padding:4px 6px;line-height:1;cursor:pointer}
+.search-icon-btn:hover{color:#ff8484}
+.divider{border:none;border-top:2px dashed #4a1414;margin:10px 0;opacity:.7}
+.empty{text-align:center;color:#8a7070;padding:30px;font-family:system-ui,sans-serif}
+.hidden{display:none!important}
+
+/* Popup tambah / edit aplikasi */
+#addModal{position:fixed;inset:0;z-index:50;background:#000000cc;display:none;align-items:center;justify-content:center;padding:16px}
+#addModal.show{display:flex}
+.modal{width:100%;max-width:420px;max-height:90vh;overflow:auto;background:linear-gradient(160deg,#160a0a,#0d0606);border:1px solid #4a0e0e;border-radius:10px;padding:18px;box-shadow:0 10px 40px #000}
+.modal h2{font-size:16px;margin:0 0 4px}
+#cancelBtn{width:100%;margin-top:8px}
+.tools{display:flex;align-items:center;gap:6px}
+#addOpenBtn{font-size:30px;font-weight:700;padding:0 8px}
+
+/* Koleksi - grid & kartu (2 kolom tetap) */
+#searchWrap{display:none;margin-bottom:10px}
+#searchWrap.show{display:block}
+#listPanel{flex:1;min-height:0;display:flex;flex-direction:column}
+#searchWrap{flex:none}
+.grid{--cols:2;flex:1;min-height:0;display:grid;gap:10px;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,minmax(148px,1fr));grid-auto-columns:calc((100% - (var(--cols) - 1)*10px)/var(--cols));overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#5a1414 transparent;padding-bottom:6px}
+@media (min-width:600px){.grid{--cols:4}}
+.grid>.card{scroll-snap-align:start;min-height:0}
+.grid>.empty{grid-column:1 / span 2;grid-row:1}
+.card{position:relative;background:linear-gradient(160deg,#160a0a,#0d0606);border:1px solid #4a0e0e;border-radius:10px;box-shadow:inset 0 0 25px #000a, 0 4px 18px #000a;padding:14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center}
+.icon{width:64px;height:64px;object-fit:contain;background:none;border:none;box-shadow:none;flex:none;cursor:pointer;transition:transform .15s}
+.icon:hover{transform:scale(1.06)}
+.name{font-family:'Creepster',cursive;font-size:19px;line-height:1.15;color:#ff6b6b;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.card.drag-over{border-color:#ff2d2d;box-shadow:0 0 0 2px #ff2d2d55,inset 0 0 25px #000a}
+.card{cursor:grab;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.card:active{cursor:grabbing}
+.card.dragging{opacity:.5;transform:scale(1.03);z-index:5}
+.menu-wrap{position:absolute;right:4px;top:2px}
+.dots{background:none;border:none;color:#a06a6a;font-size:20px;line-height:1;padding:4px 6px;letter-spacing:1px}
+.dots:hover{color:#ff8484}
+.dropdown{position:absolute;right:0;top:28px;background:#140808;border:1px solid #5a1414;border-radius:8px;box-shadow:0 8px 24px #000d;display:none;flex-direction:column;overflow:hidden;min-width:140px;z-index:10}
+.dropdown.show{display:flex}
+.dropdown button{border-radius:0;text-align:left;padding:10px 14px;background:transparent;color:#e0cfcf;font-family:system-ui,sans-serif;font-weight:600;font-size:13px}
+.dropdown button:hover{background:#2a0000}
+.dropdown button.danger-item{color:#ff5c5c}
+::selection{background:#7a0000;color:#fff}
+</style>
+</head>
 <body>
-<header class="topbar"><div class="brand"><img class="logo" src="assets/icon.png" alt="" width="48" height="48"><div class="brandtext"><h1>Check Item Tidak Bergerak</h1><p>Master • REG 4 bulan • Stock Akhir • SS-FT • Hasil</p></div></div><span id="status" class="badge ok">Siap</span></header>
+<header><h1><a href="https://github.com/zieezie23-rgb/PWA-Launcher" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">👹 PWA LAUNCHER 👹</a></h1><div class="sub">koleksi aplikasi yang terkubur dalam bayang-bayang...</div></header>
 <main>
-<section class="panel"><h2>1. BAHAN</h2>
-<label class="upload"><b>BAHAN</b><input id="bahanFile" type="file" accept=".xlsx,.xls,.xlsm,.xlsb"></label>
-<div class="controls right"><button id="clearBtn">BERSIHKAN</button><button id="processBtn" class="primary">PROSES</button></div>
-<div class="progress"><div id="barA"></div></div><p id="messageA" class="message"></p></section>
-<section class="panel" id="step2" hidden><div class="panelhead"><h2>2. SS-FT</h2><div class="controls"><button id="downloadListBtn" disabled>Download Prdcd.txt</button></div></div><p id="prdcdCount" class="message"></p>
-<label class="upload"><b>SS-FT</b><input id="ssftFile" type="file" accept=".xlsx,.xls,.csv,.txt"></label>
-<div class="controls right"><button id="processBtn2" class="primary">PROSES</button></div>
-<div class="progress"><div id="barB"></div></div><p id="messageB" class="message"></p></section>
-<section class="panel" id="step3" hidden><div class="panelhead"><h2>3. Hasil</h2><div class="controls"><button id="exportBtn" disabled>Export</button></div></div><p id="summary">Belum ada hasil.</p><div class="tablewrap"><table id="resultTable"><thead></thead><tbody></tbody></table></div></section>
-<section class="panel" id="step4" hidden><h2>4. Kesimpulan</h2><pre id="kesimpulan" class="kesimpulan">Belum ada hasil.</pre></section>
-</main><footer><button type="button" id="panduanLink" class="linkbtn">Panduan</button> • Zie Project • Check Item Tidak Bergerak v 1.0 @2026 • <a href="https://wa.me/6282113327262" target="_blank" rel="noopener">Whatsapp</a></footer>
-<dialog id="panduan"><h2>Panduan pengisian</h2><ol>
-<li>Siapkan "BAHAN":<ul><li>Master Stock</li><li>4 bulan file REG</li><li>Stock Akhir</li></ul></li>
-<li>Upload "BAHAN", lalu tekan "PROSES" di langkah 1</li>
-<li>Tekan "Download Prdcd.txt"</li>
-<li>Upload SS-FT, lalu tekan "PROSES" di langkah 2</li>
-<li>Salin teks Kesimpulan untuk laporan, atau tekan "EXPORT" untuk Laporan Excelnya</li></ol>
-<div class="controls"><button id="panduanClose">TUTUP</button></div></dialog>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="app.js"></script></body></html>
+
+<div class="section-title" id="authTitle"><span class="txt">🩸 Bangkit / Rasuki Akun</span></div>
+<section class="panel" id="auth">
+<div class="muted">Masukkan mantra rahasiamu (username & password). Akun yang sama bisa dibangkitkan dari perangkat lain.</div>
+<label>👤 Username</label><input id="username" type="text" autocomplete="username" placeholder="contoh: budi123">
+<label>🔒 Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter kutukan">
+<div class="row" style="margin-top:14px"><button class="light" id="signup">💀 Daftar</button><button class="primary" id="login">⚡ Masuk</button></div>
+<div class="status" id="authStatus"></div>
+</section>
+
+<section class="hidden" id="accountPanel">
+<div class="account"><div class="email" id="userEmail"></div><button class="icon-only" id="logout" title="Keluar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></button></div>
+</section>
+
+<hr class="divider hidden" id="listDivider">
+<div class="section-title spread hidden" id="listTitle"><div class="left"><span class="txt">🕸️ Koleksi Terkutuk</span></div><div class="tools"><button class="search-icon-btn" id="addOpenBtn" title="Tambah aplikasi" aria-label="Tambah aplikasi">+</button><button class="search-icon-btn" id="searchToggle" title="Cari" aria-label="Cari">🔎</button></div></div>
+<div id="listPanel" class="hidden">
+<div id="searchWrap"><input id="search" placeholder="🔎 Cari di antara arwah aplikasi..."></div>
+<div id="grid" class="grid"></div>
+</div>
+</main>
+<div id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modal">
+<h2 id="modalTitle">🧟 Ritual Tambah Aplikasi</h2>
+<label>Nama aplikasi</label><input id="name" placeholder="Contoh: Belajar Ceria">
+<label>URL aplikasi</label><input id="url" type="url" placeholder="https://contoh.com/app/">
+<label>URL repository</label><input id="repo" type="url" placeholder="https://github.com/user/repo">
+<button class="primary" id="add" style="width:100%;margin-top:14px">☠️ Simpan</button>
+<button class="light" id="cancelBtn">Batal</button>
+<div class="status" id="addStatus"></div>
+</div>
+</div>
+<footer>Zie Project • PWA Launcher v 1.0 @2026</footer>
+
+<script type="module">
+/* 1) Buat project Supabase.
+   2) Isi SUPABASE_URL dan SUPABASE_ANON_KEY di bawah.
+   3) Jalankan SQL yang ada di supabase.sql.
+*/
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://tkovoanimdzjsfcpvguf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_yO7XRTLUT_5eejm3Smr0mA_Oxx-DQyl";
+const configured = !SUPABASE_URL.startsWith("GANTI_") && !SUPABASE_ANON_KEY.startsWith("GANTI_");
+const supabase = configured ? createClient(SUPABASE_URL,SUPABASE_ANON_KEY) : null;
+
+const $=id=>document.getElementById(id);
+const DUMMY_DOMAIN="pwahub.local"; // username diubah jadi "username@pwahub.local" supaya Supabase Auth tetap jalan tanpa email asli
+function toEmail(u){return u.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,"")+"@"+DUMMY_DOMAIN}
+function msg(el,text){el.textContent=text}
+function fallback(name){return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><text x="96" y="140" text-anchor="middle" font-size="120">👻</text></svg>`)}
+function valid(u){try{return new URL(u).href}catch{return ""}}
+async function manifestIcon(appUrl,name){
+ try{let u=new URL(appUrl);
+   // Coba /manifest.json dulu, lalu cari <link rel=manifest> di HTML halamannya.
+   let r=await fetch(new URL("/manifest.json",u.origin),{mode:"cors",cache:"no-store"});
+   if(!r.ok){let h=await fetch(appUrl,{mode:"cors",cache:"no-store"});let t=await h.text();let m=t.match(/<link[^>]+rel=["'](?:manifest|webmanifest)["'][^>]+href=["']([^"']+)["']/i);if(!m)throw 0;r=await fetch(new URL(m[1],appUrl),{mode:"cors",cache:"no-store"})}
+   let j=await r.json();let icons=j.icons||[];if(!icons.length)throw 0;
+   let b=icons.find(x=>String(x.sizes||"").includes("512x512"))||icons.find(x=>String(x.sizes||"").includes("192x192"))||icons[0];
+   return new URL(b.src,r.url||appUrl).href;
+ }catch{return fallback(name)}
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+let editingId=null;
+
+function resetAddForm(){
+ editingId=null;
+ $("name").value=$("url").value=$("repo").value="";
+ $("add").textContent="☠️ Simpan";
+ $("modalTitle").textContent="🧟 Ritual Tambah Aplikasi";
+ msg($("addStatus"),"");
+}
+function openAdd(){
+ $("addModal").classList.add("show");
+ document.body.style.overflow="hidden";
+ $("name").focus();
+}
+function closeAdd(){
+ $("addModal").classList.remove("show");
+ document.body.style.overflow="";
+ resetAddForm();
+}
+
+async function refresh(){
+ if(!supabase)return;
+ const {data:{user}}=await supabase.auth.getUser();
+ const logged=!!user;
+ $("auth").classList.toggle("hidden",logged);
+ $("authTitle").classList.toggle("hidden",logged);
+ $("accountPanel").classList.toggle("hidden",!logged);
+ $("listDivider").classList.toggle("hidden",!logged);
+ $("listTitle").classList.toggle("hidden",!logged);
+ $("listPanel").classList.toggle("hidden",!logged);
+ if(!logged){closeAdd();return}
+ $("userEmail").textContent="👁️ Selamat datang, "+(user.user_metadata?.username||user.email.split("@")[0]);
+ const {data,error}=await supabase.from("apps").select("*").order("sort_order",{ascending:true}).order("created_at",{ascending:true});
+ if(error){$("grid").innerHTML=`<div class="panel empty">Gagal mengambil data: ${escapeHtml(error.message)}</div>`;return}
+ const q=$("search").value.toLowerCase().trim();const list=(data||[]).filter(a=>(a.name+" "+a.url).toLowerCase().includes(q));
+ $("grid").innerHTML=list.length?list.map(a=>`<article class="card" data-id="${a.id}">
+  <div class="menu-wrap">
+   <button class="dots" data-menu="${a.id}">•••</button>
+   <div class="dropdown">
+    <button data-edit="${a.id}">✏️ Edit</button>
+    <button data-repo="${a.id}">🔗 Repo</button>
+    <button class="danger-item" data-delete="${a.id}">☠️ Musnahkan</button>
+   </div>
+  </div>
+  <img class="icon" src="${escapeHtml(a.icon_url||fallback(a.name))}" onerror="this.onerror=null;this.src='${fallback(a.name)}'" data-open="${a.id}">
+  <div class="name">${escapeHtml(a.name)}</div>
+ </article>`).join(""):`<div class="panel empty">Belum ada aplikasi.</div>`;
+
+ document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{let a=data.find(x=>x.id==b.dataset.open);window.open(a.url,"_blank","noopener")});
+ setupDragReorder(list);
+ document.querySelectorAll("[data-repo]").forEach(b=>b.onclick=(e)=>{e.stopPropagation();let a=data.find(x=>x.id==b.dataset.repo);window.open(a.repo_url,"_blank","noopener")});
+ document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=async(e)=>{e.stopPropagation();if(confirm("Musnahkan aplikasi ini selamanya?")){await supabase.from("apps").delete().eq("id",b.dataset.delete);refresh()}});
+ document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=(e)=>{
+  e.stopPropagation();
+  let a=data.find(x=>x.id==b.dataset.edit);
+  editingId=a.id;
+  $("name").value=a.name; $("url").value=a.url; $("repo").value=a.repo_url;
+  $("add").textContent="☠️ Simpan Perubahan";
+  $("modalTitle").textContent="✏️ Edit Aplikasi";
+  openAdd();
+ });
+ document.querySelectorAll("[data-menu]").forEach(b=>b.onclick=(e)=>{
+  e.stopPropagation();
+  const dd=b.nextElementSibling;
+  document.querySelectorAll(".dropdown.show").forEach(d=>{if(d!==dd)d.classList.remove("show")});
+  dd.classList.toggle("show");
+ });
+}
+
+let dragSrcId=null,dragList=[],dragActive=false,dragOverId=null,longPressTimer=null,pStartX=0,pStartY=0;
+const LONG_PRESS_MS=250,MOVE_CANCEL_PX=10;
+
+function setupDragReorder(list){
+ dragList=list;
+ document.querySelectorAll(".card").forEach(card=>{
+  card.onpointerdown=(e)=>{
+   if(e.target.closest("button,.dropdown,a"))return;
+   dragSrcId=card.dataset.id;dragActive=false;dragOverId=null;
+   pStartX=e.clientX;pStartY=e.clientY;
+   clearTimeout(longPressTimer);
+   longPressTimer=setTimeout(()=>{
+    dragActive=true;
+    card.classList.add("dragging");
+    if(navigator.vibrate)navigator.vibrate(15);
+   },LONG_PRESS_MS);
+  };
+ });
+}
+
+document.addEventListener("pointermove",(e)=>{
+ if(!dragSrcId)return;
+ if(!dragActive){
+  if(Math.abs(e.clientX-pStartX)>MOVE_CANCEL_PX||Math.abs(e.clientY-pStartY)>MOVE_CANCEL_PX){
+   clearTimeout(longPressTimer);dragSrcId=null;
+  }
+  return;
+ }
+ e.preventDefault();
+ const el=document.elementFromPoint(e.clientX,e.clientY);
+ const overCard=el&&el.closest(".card");
+ document.querySelectorAll(".card.drag-over").forEach(c=>c.classList.remove("drag-over"));
+ if(overCard&&overCard.dataset.id!==dragSrcId){
+  dragOverId=overCard.dataset.id;
+  overCard.classList.add("drag-over");
+ }else{
+  dragOverId=null;
+ }
+},{passive:false});
+
+document.addEventListener("pointerup",async()=>{
+ clearTimeout(longPressTimer);
+ document.querySelectorAll(".card.dragging").forEach(c=>c.classList.remove("dragging"));
+ document.querySelectorAll(".card.drag-over").forEach(c=>c.classList.remove("drag-over"));
+ if(dragActive&&dragSrcId&&dragOverId&&dragOverId!==dragSrcId){
+  const from=dragList.findIndex(a=>a.id==dragSrcId),to=dragList.findIndex(a=>a.id==dragOverId);
+  if(from>=0&&to>=0){
+   const reordered=dragList.slice();
+   const [moved]=reordered.splice(from,1);
+   reordered.splice(to,0,moved);
+   await Promise.all(reordered.map((a,i)=>supabase.from("apps").update({sort_order:i}).eq("id",a.id)));
+   refresh();
+  }
+ }
+ dragSrcId=null;dragActive=false;dragOverId=null;
+});
+
+document.addEventListener("pointercancel",()=>{
+ clearTimeout(longPressTimer);
+ document.querySelectorAll(".card.dragging").forEach(c=>c.classList.remove("dragging"));
+ document.querySelectorAll(".card.drag-over").forEach(c=>c.classList.remove("drag-over"));
+ dragSrcId=null;dragActive=false;dragOverId=null;
+});
+
+document.addEventListener("click",function(e){
+ if(!e.target.closest(".menu-wrap")){
+  document.querySelectorAll(".dropdown.show").forEach(d=>d.classList.remove("show"));
+ }
+});
+
+$("addOpenBtn").onclick=()=>{resetAddForm();openAdd()};
+$("cancelBtn").onclick=closeAdd;
+$("addModal").addEventListener("pointerdown",e=>{if(e.target===$("addModal"))closeAdd()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("addModal").classList.contains("show"))closeAdd()});
+$("searchToggle").onclick=()=>{
+ $("searchWrap").classList.toggle("show");
+ if($("searchWrap").classList.contains("show"))$("search").focus();
+};
+
+$("signup").onclick=async()=>{
+ if(!supabase)return msg($("authStatus"),"Isi konfigurasi Supabase terlebih dahulu.");
+ let uname=$("username").value.trim();
+ if(uname.length<3)return msg($("authStatus"),"Username minimal 3 karakter.");
+ let {error}=await supabase.auth.signUp({email:toEmail(uname),password:$("password").value,options:{data:{username:uname}}});
+ msg($("authStatus"),error?(error.message.includes("registered")?"Username sudah dipakai.":error.message):"Pendaftaran berhasil. Silakan masuk.")
+};
+$("login").onclick=async()=>{
+ if(!supabase)return msg($("authStatus"),"Isi konfigurasi Supabase terlebih dahulu.");
+ let uname=$("username").value.trim();
+ let {error}=await supabase.auth.signInWithPassword({email:toEmail(uname),password:$("password").value});
+ msg($("authStatus"),error?"Username atau password salah.":"Berhasil masuk.");if(!error)refresh()
+};
+$("logout").onclick=async()=>{await supabase.auth.signOut();refresh()};
+$("add").onclick=async()=>{
+ if(!supabase)return;
+ let name=$("name").value.trim(),url=valid($("url").value.trim()),repo=valid($("repo").value.trim());
+ if(!name||!url||!repo)return msg($("addStatus"),"Lengkapi semua kolom.");
+ msg($("addStatus"),"Membaca icon...");
+ let icon=await manifestIcon(url,name);
+ let {data:{user}}=await supabase.auth.getUser();
+ let error;
+ if(editingId){
+  ({error}=await supabase.from("apps").update({name,url,repo_url:repo,icon_url:icon}).eq("id",editingId));
+ }else{
+  let {count}=await supabase.from("apps").select("id",{count:"exact",head:true});
+  ({error}=await supabase.from("apps").insert({user_id:user.id,name,url,repo_url:repo,icon_url:icon,sort_order:count||0}));
+ }
+ msg($("addStatus"),error?error.message:(editingId?"Perubahan disimpan.":"Aplikasi berhasil ditambahkan."));
+ if(!error){closeAdd();refresh()}
+};
+$("search").oninput=refresh;
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+if(configured){supabase.auth.onAuthStateChange(()=>refresh());refresh()}else{
+ $("authStatus").textContent="Supabase belum dikonfigurasi. Isi SUPABASE_URL dan SUPABASE_ANON_KEY di index.html.";
+}
+</script>
+</body></html>
