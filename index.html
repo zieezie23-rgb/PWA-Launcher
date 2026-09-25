@@ -155,9 +155,27 @@ function toEmail(u){return u.trim().toLowerCase().replace(/[^a-z0-9_.-]/g,"")+"@
 function msg(el,text){el.textContent=text}
 function fallback(name){return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192"><text x="96" y="140" text-anchor="middle" font-size="120">📦</text></svg>`)}
 function valid(u){try{return new URL(u).href}catch{return ""}}
+function testImage(url){
+ return new Promise(resolve=>{
+   const img=new Image();
+   img.onload=()=>resolve(true);
+   img.onerror=()=>resolve(false);
+   img.src=url;
+ });
+}
 async function manifestIcon(appUrl,name){
+ // 1) Coba beberapa nama file umum di folder assets/ relatif ke URL aplikasi.
+ // Pakai Image() (bukan fetch) karena menampilkan gambar lintas-domain
+ // tidak butuh header CORS dari server, beda dengan fetch() yang butuh.
+ const candidates=["assets/icon.png","assets/icon-512.png","assets/icon-192.png","assets/icon-maskable-512.png"];
+ for(const path of candidates){
+   try{
+     let iconUrl=new URL(path,appUrl).href;
+     if(await testImage(iconUrl))return iconUrl;
+   }catch{}
+ }
+ // 2) Kalau tidak ada, coba /manifest.json, lalu <link rel=manifest> di HTML halamannya.
  try{let u=new URL(appUrl);
-   // Coba /manifest.json dulu, lalu cari <link rel=manifest> di HTML halamannya.
    let r=await fetch(new URL("/manifest.json",u.origin),{mode:"cors",cache:"no-store"});
    if(!r.ok){let h=await fetch(appUrl,{mode:"cors",cache:"no-store"});let t=await h.text();let m=t.match(/<link[^>]+rel=["'](?:manifest|webmanifest)["'][^>]+href=["']([^"']+)["']/i);if(!m)throw 0;r=await fetch(new URL(m[1],appUrl),{mode:"cors",cache:"no-store"})}
    let j=await r.json();let icons=j.icons||[];if(!icons.length)throw 0;
