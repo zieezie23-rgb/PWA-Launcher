@@ -379,7 +379,6 @@ $("searchToggle").onclick=()=>{
  if($("searchWrap").classList.contains("show"))$("search").focus();
 };
 
-let accessUnlocked=false;
 let loginPressTimer=null;
 
 function openAccess(){
@@ -396,9 +395,8 @@ $("accessCancel").onclick=closeAccess;
 $("accessModal").addEventListener("pointerdown",e=>{if(e.target===$("accessModal"))closeAccess()});
 $("accessConfirm").onclick=()=>{
  if($("accessCode").value!=="00000") return msg($("accessStatus"),"Kode akses salah.");
- accessUnlocked=true;
  closeAccess();
- msg($("authStatus"),"Akses diterima. Silakan masuk.");
+ window.open("https://github.com/zieezie23-rgb/PWA-Launcher","_blank","noopener");
 };
 $("accessCode").addEventListener("keydown",e=>{if(e.key==="Enter")$("accessConfirm").click()});
 
